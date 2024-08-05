@@ -11,16 +11,16 @@ let indice =()=>{
 }
 boton.addEventListener("click", indice)
 //2
-
-const conversion = 4052//precio 4 agosto
-function conversor() {
-    let dolares = document.getElementById("dolar")
-    let peso = document.getElementById("conversorPeso")
-    
-    let dolar = parseFloat(dolares.value)
-    let pesos = dolar * tipoDeCambio
-
-    dolares.value =pesos.toFixed(2)
-    document.getElementById("dolar").addEventListener("keydown",conversorPeso);
+let dolar = document.getElementById("dolar");
+let conversorPeso = document.getElementById("conversorPeso")
+const conversor = ()=>{
+    if(dolar.value > 0){
+        let operacion =dolar.value *4052
+        conversorPeso.value = operacion
+    }
 }
+dolar.addEventListener("input", conversor)
+conversorPeso.addEventListener("input", conversorPeso)
+
+
 
