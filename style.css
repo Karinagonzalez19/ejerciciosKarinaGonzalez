@@ -1,0 +1,26 @@
+.card {
+    font-size: 20px; 
+    border: 1px solid #ffc107; 
+    border-radius: 5px; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    width: 300px;
+}
+
+.form-check-label {
+    font-weight: bold; 
+}
+
+.form-check-input {
+    border: 1px solid #ffc107; 
+}
+
+
+.card-body {
+    margin-top: 10px; 
+}
+
+
+.btn-danger {
+    margin-top: 10px; 
+}
