@@ -73,7 +73,7 @@ function verNotes(notas, contenedor) {
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault${nota.id}" ${nota.realizada ? 'checked' : ''} onchange="marcarRealizada(${nota.id})">
                 <label class="form-check-label" for="flexCheckDefault${nota.id}">${nota.titulo}</label>
-                <div class="card-body">
+                <div class="card-body ${nota.realizada ? 'realizada' : ''}">
                     <p class="card-text">${nota.texto}</p>
                     <button class="btn btn-danger" onClick="borrarNota(${nota.id})">Borrar nota</button>
                 </div>
@@ -85,37 +85,33 @@ function verNotes(notas, contenedor) {
 
 verNotes(tareas, fatherNotes);
 
-function agregarNote(titulo, texto) {
-    idGlobal++;
-    tareas.push({
-        id: idGlobal,
-        titulo: titulo,
-        texto: texto,
-        realizada: false
-    });
-    verNotes(tareas, fatherNotes);
-}
-
-function borrarNota(id) {
-    tareas = tareas.filter(tarea => tarea.id != id);
-    fatherNotes.innerHTML = ""; 
-    verNotes(tareas, fatherNotes);
-}
-
-const botonGuardar = document.getElementById("guardar");
-botonGuardar.addEventListener("click", () => {
+function agregarNota() {
     const titulo = document.getElementById("noteTitle").value.trim();
     const contenido = document.getElementById("noteContent").value.trim();
 
     if (titulo && contenido) {
-        agregarNote(titulo, contenido);
+        idGlobal++;
+        tareas.push({
+            id: idGlobal,
+            titulo: titulo,
+            texto: contenido,
+            realizada: false
+        });
+        verNotes(tareas, fatherNotes);
         document.getElementById("noteTitle").value = '';
         document.getElementById("noteContent").value = '';
     } else {
-        console.log();
-        ("Por favor, complete ambos campos.");
+        console.log("Por favor, complete ambos campos.");
     }
-});
+}
+
+function borrarNota(id) {
+    tareas = tareas.filter(tarea => tarea.id != id);
+    verNotes(tareas, fatherNotes);
+}
+
+const botonGuardar = document.getElementById("guardar");
+botonGuardar.addEventListener("click", agregarNota);
 
 const borraText = document.getElementById("clear");
 borraText.addEventListener("click", () => {
@@ -131,42 +127,17 @@ function marcarRealizada(id) {
     }
 }
 
+const filtroTexto = document.getElementById("filtro");
+const botonRealizadas = document.getElementById("boton1");
 
-function agregarNote(titulo, texto) {
-    idGlobal++;
-    tareas.push({
-        id: idGlobal,
-        titulo: titulo,
-        texto: texto,
-        realizada: false
-    });
-    verNotes(tareas, fatherNotes);
+function aplicarFiltros() {
+    const texto = filtroTexto.value.trim().toLowerCase();
+    const notasFiltradas = filtrarPorTexto(tareas, texto);
+    verNotes(botonRealizadas.checked ? filtrarPorRealizadas(notasFiltradas) : notasFiltradas, fatherNotes);
 }
 
-function borrarNota(id) {
-    tareas = tareas.filter(tarea => tarea.id != id);
-    fatherNotes.innerHTML = "";
-    verNotes(tareas, fatherNotes);
-}
-
-botonGuardar.addEventListener("click", () => {
-    const titulo = document.getElementById("noteTitle").value.trim();
-    const contenido = document.getElementById("noteContent").value.trim();
-
-    if (titulo && contenido) {
-        agregarNote(titulo, contenido);
-        document.getElementById("noteTitle").value = '';
-        document.getElementById("noteContent").value = '';
-    } else {
-        console.log("Por favor, complete ambos campos.");
-    }
-});
-
-const borrarText = document.getElementById("clear");
-borrarText.addEventListener("click", () => {
-    document.getElementById("noteTitle").value = "";
-    document.getElementById("noteContent").value = "";
-});
+filtroTexto.addEventListener("keyup", aplicarFiltros);
+botonRealizadas.addEventListener("change", aplicarFiltros);
 
 function filtrarPorRealizadas(array) {
     return array.filter(nota => nota.realizada);
@@ -177,22 +148,7 @@ function filtrarPorTexto(array, texto) {
         return array;
     }
     return array.filter(nota =>
-        nota.titulo.toLowerCase().includes(texto.toLowerCase()) ||
-        nota.texto.toLowerCase().includes(texto.toLowerCase())
+        nota.titulo.toLowerCase().includes(texto) ||
+        nota.texto.toLowerCase().includes(texto)
     );
 }
-
-const filtroTexto = document.getElementById("filtro");
-const botonRealizadas = document.getElementById("boton1");
-
-function aplicarFiltros() {
-    const texto = filtroTexto.value.trim();
-    const notasFiltradas = filtrarPorTexto(tareas, texto);
-
-    verNotes(botonRealizadas.checked ? filtrarPorRealizadas(notasFiltradas) : notasFiltradas, fatherNotes);
-}
-
-
-filtroTexto.addEventListener("keyup", aplicarFiltros);
-botonRealizadas.addEventListener("change", aplicarFiltros);
-

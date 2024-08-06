@@ -24,3 +24,7 @@
 .btn-danger {
     margin-top: 10px; 
 }
+.card-body.realizada {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
